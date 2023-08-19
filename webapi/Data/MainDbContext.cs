@@ -9,6 +9,9 @@ namespace webapi.Data
         public DbSet<Entity.Customer> Customers { get; set; }
         public DbSet<ExceptionLog> ExceptionLog { get; set; }
         public DbSet<Musteri> Musteri { get; set; }
+        public DbSet<Urun> Urun { get; set; }
+        public DbSet<Teklif> Teklif { get; set; }
+        public DbSet<Kategori> Kategori { get; set; }
 
         public string DbPath { get; }
 
@@ -23,7 +26,5 @@ namespace webapi.Data
         {
             optionsBuilder.UseSqlite($"Data Source={DbPath}");
         }
-
-
     }
 }

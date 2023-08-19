@@ -8,8 +8,14 @@ import Loadable from 'ui-component/Loadable';
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
 
 // digerIslemler routing
-const Musteriler = Loadable(lazy(() => import('views/digerIslemler/MusteriListesi')));
-const MusteriEkle = Loadable(lazy(() => import('views/digerIslemler/MusteriEkle')));
+const Musteriler = Loadable(lazy(() => import('views/digerIslemler/Musteriler/MusteriListesi')));
+const MusteriEkle = Loadable(lazy(() => import('views/digerIslemler/Musteriler/MusteriEkle')));
+const Urunler = Loadable(lazy(() => import('views/digerIslemler/Urunler/UrunListesi')));
+const UrunEkle = Loadable(lazy(() => import('views/digerIslemler/Urunler/UrunEkle')));
+const Tekliflerim = Loadable(lazy(() => import('views/digerIslemler/Teklifler/Tekliflerim')));
+const GelenTeklifler = Loadable(lazy(() => import('views/digerIslemler/Teklifler/GelenTeklifler')));
+const TeklifVer = Loadable(lazy(() => import('views/digerIslemler/Teklifler/TeklifVer')));
+const TeklifDuzenle = Loadable(lazy(() => import('views/digerIslemler/Teklifler/TeklifDuzenle')));
 
 // utilities routing
 const UtilsTypography = Loadable(lazy(() => import('views/utilities/Typography')));
@@ -108,6 +114,34 @@ const MainRoutes = {
                 {
                     path: 'musteri-duzenle/:id',
                     element: <MusteriEkle />
+                },
+                {
+                    path: 'urunler',
+                    element: <Urunler />
+                },
+                {
+                    path: 'urun-ekle',
+                    element: <UrunEkle />
+                },
+                {
+                    path: 'urun-duzenle/:id',
+                    element: <UrunEkle />
+                },
+                {
+                    path: 'tekliflerim',
+                    element: <Tekliflerim />
+                },
+                {
+                    path: 'gelen-teklifler',
+                    element: <GelenTeklifler />
+                },
+                {
+                    path: 'teklif-ver/:id',
+                    element: <TeklifVer />
+                },
+                {
+                    path: 'teklif-duzenle/:id',
+                    element: <TeklifDuzenle />
                 }
             ]
         }

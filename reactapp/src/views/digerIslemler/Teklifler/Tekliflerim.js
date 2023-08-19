@@ -1,12 +1,12 @@
-import { useMemo, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useNavigate, useParams } from 'react-router';
+import { useQuery, QueryClientProvider, QueryClient } from '@tanstack/react-query';
+import { useMemo } from 'react';
 import MaterialReactTable from 'material-react-table';
 import { Box, IconButton, Tooltip } from '@mui/material';
-import RefreshIcon from '@mui/icons-material/Refresh';
-import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
-import axios from 'axios';
-import { Edit as EditIcon, Delete as DeleteIcon, Email as EmailIcon } from '@mui/icons-material';
+import { Refresh as RefreshIcon, Edit as EditIcon, Delete as DeleteIcon, Email as EmailIcon } from '@mui/icons-material';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
 
 const Example = () => {
     const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
@@ -32,7 +32,7 @@ const Example = () => {
             let config = {
                 method: 'post',
                 maxBodyLength: Infinity,
-                url: 'http://localhost:5273/api/Musteri/GetGrid',
+                url: 'http://localhost:5273/api/Teklif/GetTekliflerim',
                 data: data
             };
 
@@ -52,45 +52,35 @@ const Example = () => {
     const columns = useMemo(
         () => [
             {
-                accessorKey: 'adi',
-                header: 'İsim'
+                accessorKey: 'urunAdi',
+                header: 'Ürün Adı'
             },
             {
-                accessorKey: 'soyadi',
-                header: 'Soyisim'
+                accessorKey: 'urunSahibi',
+                header: 'Ürün Sahibi'
             },
             {
-                accessorKey: 'firma',
-                header: 'Firma'
-            },
-            {
-                accessorKey: 'telefonNumarasi',
-                header: 'Telefon Numarası'
-            },
-            {
-                accessorKey: 'email',
-                header: 'Email Adresi'
+                accessorKey: 'teklifDegeri',
+                header: 'Teklif Miktarı'
             }
         ],
         []
     );
 
-    const deleteById = (id) => {
+    const deleteById = (id, ad, deger) => {
         toast.promise(deletePromise(id), {
-            pending: 'Müşteri siliniyor.',
-            success: 'Müşteri başarıyla silindi 👌',
-            error: 'Müşteri silinirken hata oluştu 🤯'
+            pending: ad + ' ürününe yapılan ' + deger + '₺ değerindeki teklif siliniyor.',
+            success: ad + ' ürününe yapılan ' + deger + '₺ değerindeki teklif başarıyla silindi 👌',
+            error: ad + ' ürününe yapılan ' + deger + '₺ değerindeki teklif silinirken hata oluştu 🤯'
         });
     };
 
     const deletePromise = (id) => {
         return new Promise(async (resolve, reject) => {
-            const start = Date.now();
-
             let config = {
                 method: 'get',
                 maxBodyLength: Infinity,
-                url: 'http://localhost:5273/api/Musteri/Delete',
+                url: 'http://localhost:5273/api/Teklif/Delete',
                 headers: {
                     'Content-Type': 'application/json',
                     Accept: 'text/plain'
@@ -105,10 +95,6 @@ const Example = () => {
                 .then(async (response) => {
                     console.log(JSON.stringify(response.data));
                     if (response.data.result) {
-                        const millis = Date.now() - start;
-                        if (millis < 1000) {
-                            await sleep(1000 - millis);
-                        }
                         refetch();
                         resolve(response.data); // Başarılı sonuç durumunda Promise'ı çöz
                     } else {
@@ -133,25 +119,31 @@ const Example = () => {
                 }}
                 renderRowActions={({ row }) => (
                     <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
-                        <IconButton color="primary" onClick={() => window.open('mailto:' + row.original.email)}>
-                            <EmailIcon />
-                        </IconButton>
-                        <IconButton
-                            color="secondary"
-                            onClick={() => {
-                                navigate(`/digerIslemler/musteri-duzenle/${row.original.id}`);
-                            }}
-                        >
-                            <EditIcon />
-                        </IconButton>
-                        <IconButton
-                            color="error"
-                            onClick={() => {
-                                deleteById(row.original.id);
-                            }}
-                        >
-                            <DeleteIcon />
-                        </IconButton>
+                        <Tooltip title="Düzenle">
+                            <IconButton
+                                color="secondary"
+                                onClick={() => {
+                                    navigate(`/digerIslemler/teklif-duzenle/${row.original.id}`, {
+                                        state: {
+                                            urunAdi: row.original.urunAdi,
+                                            urunSahibi: row.original.urunSahibi
+                                        }
+                                    });
+                                }}
+                            >
+                                <EditIcon />
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Sil">
+                            <IconButton
+                                color="error"
+                                onClick={() => {
+                                    deleteById(row.original.id, row.original.urunAdi, row.original.teklifDegeri);
+                                }}
+                            >
+                                <DeleteIcon />
+                            </IconButton>
+                        </Tooltip>
                     </Box>
                 )}
                 positionActionsColumn="last"

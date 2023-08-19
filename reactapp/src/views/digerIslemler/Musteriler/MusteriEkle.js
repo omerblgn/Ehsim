@@ -70,7 +70,7 @@ function MusteriEkle() {
             toast.promise(musteriEklePromise, {
                 pending: 'Müşteri kaydı yapılıyor',
                 success: musteriAdi + ' ' + musteriSoyadi + ' başarıyla eklendi 👌',
-                error: musteriAdi + ' ' + musteriSoyadi + ' eklenirken hata oluştu 🤯'
+                error: musteriAdi != '' && musteriSoyadi != '' ? musteriAdi + ' ' + musteriSoyadi : 'Müşteri' + ' eklenirken hata oluştu 🤯'
             });
         }
     };
@@ -83,6 +83,7 @@ function MusteriEkle() {
                 id: typeof id !== 'undefined' ? id : 0,
                 adi: musteriAdi,
                 soyadi: musteriSoyadi,
+                firma: firmaAdi,
                 telefonNumarasi: phone,
                 email: email
             });
@@ -149,6 +150,7 @@ function MusteriEkle() {
                         console.log(response.data);
                         setMusteriAdi(response.data.data.adi);
                         setMusteriSoyadi(response.data.data.soyadi);
+                        setFirmaAdi(response.data.data.firma);
                         setEmail(response.data.data.email);
                         setPhone(response.data.data.telefonNumarasi);
                         setFetchingError(false);
@@ -178,55 +180,68 @@ function MusteriEkle() {
                         {(isUpdate === 0 || !isFetching) && (
                             <>
                                 <TextField
-                                    value={musteriAdi}
+                                    required
                                     margin="normal"
                                     id="name"
                                     label="Müşteri Adı"
                                     variant="outlined"
+                                    value={musteriAdi}
                                     onChange={(e) => setMusteriAdi(e.target.value)}
                                     error={!!validationErrors.Adi} // Hatanın varlığına göre error özelliğini ayarla
-                                    helperText={validationErrors.Adi} // Hata mesajını helperText olarak göster
+                                    helperText={validationErrors.Adi && 'Müşteri adı boş bırakılamaz.'} // Hata mesajını helperText olarak göster
                                 />
                                 <TextField
+                                    required
                                     margin="normal"
-                                    value={musteriSoyadi}
                                     id="surname"
                                     label="Müşteri Soyadı"
                                     variant="outlined"
+                                    value={musteriSoyadi}
                                     onChange={(e) => setMusteriSoyadi(e.target.value)}
                                     error={!!validationErrors.Soyadi}
-                                    helperText={validationErrors.Soyadi}
+                                    helperText={validationErrors.Soyadi && 'Müşteri soyadı boş bırakılamaz.'}
                                 />
                                 <TextField
+                                    required
                                     margin="normal"
                                     id="company"
-                                    value={firmaAdi}
                                     label="Firma Adı"
                                     variant="outlined"
+                                    value={firmaAdi}
                                     onChange={(e) => setFirmaAdi(e.target.value)}
+                                    error={!!validationErrors.Firma}
+                                    helperText={validationErrors.Firma && 'Firma boş bırakılamaz.'}
                                 />
                                 <TextField
-                                    error={emailError || !!validationErrors.Email}
-                                    helperText={emailError ? 'Email adresini kontrol edin' : validationErrors.Email} // emailError true ise kendi mesajını göster, aksi halde validationErrors'tan gelen mesajı göster
-                                    type="email"
+                                    required
                                     margin="normal"
                                     id="e-mail"
-                                    label="Email"
+                                    label="E-posta"
                                     variant="outlined"
                                     value={email}
                                     onChange={(e) => handleEmail(e)}
+                                    error={emailError || !!validationErrors.Email}
+                                    helperText={
+                                        emailError ? 'E-posta adresini kontrol edin' : validationErrors.Email && 'E-posta boş bırakılamaz.'
+                                    } // emailError true ise kendi mesajını göster, aksi halde validationErrors'tan gelen mesajı göster
+                                    type="email"
                                 />
                                 <MuiTelInput
-                                    error={phoneError || !!validationErrors.TelefonNumarasi}
-                                    helperText={phoneError ? 'Telefon numarasını kontrol edin' : validationErrors.TelefonNumarasi}
-                                    defaultCountry="TR"
-                                    preferredCountries={['TR']}
-                                    variant="outlined"
+                                    required
                                     margin="normal"
+                                    id="phone-number"
                                     label="Telefon Numarası"
+                                    variant="outlined"
                                     value={phone}
                                     onChange={(value, info) => handleNumber(value, info)}
-                                    id="phone-number"
+                                    error={phoneError || !!validationErrors.TelefonNumarasi}
+                                    helperText={
+                                        phoneError
+                                            ? 'Telefon numarasını kontrol edin'
+                                            : validationErrors.TelefonNumarasi && 'Telefon numarası boş bırakılamaz.'
+                                    }
+                                    defaultCountry="TR"
+                                    preferredCountries={['TR']}
                                     focusOnSelectCountry
                                     forceCallingCode
                                 />

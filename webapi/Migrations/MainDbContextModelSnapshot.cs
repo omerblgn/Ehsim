@@ -15,7 +15,7 @@ namespace webapi.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "7.0.7");
+            modelBuilder.HasAnnotation("ProductVersion", "7.0.10");
 
             modelBuilder.Entity("webapi.Entity.Customer", b =>
                 {
@@ -57,6 +57,21 @@ namespace webapi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Customers");
+                });
+
+            modelBuilder.Entity("webapi.Entity.Kategori", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Adi")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Kategori");
                 });
 
             modelBuilder.Entity("webapi.Entity.Log.ExceptionLog", b =>
@@ -113,6 +128,10 @@ namespace webapi.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Firma")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("INTEGER");
 
@@ -133,6 +152,72 @@ namespace webapi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Musteri");
+                });
+
+            modelBuilder.Entity("webapi.Entity.Teklif", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("MusteriId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("TeklifDegeri")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("UrunId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Teklif");
+                });
+
+            modelBuilder.Entity("webapi.Entity.Urun", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Aciklama")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Adi")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Creator")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Ebat")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Fiyat")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Kategori")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Kdv")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ParaBirimi")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Tedarikci")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Urun");
                 });
 #pragma warning restore 612, 618
         }

@@ -12,7 +12,7 @@ namespace webapi.Data.Concrete
         protected MainDbContext _dataContext;
         protected Dictionary<string, dynamic> _repositories;
         protected readonly IHttpContextAccessor _httpContextAccessor;
-        protected int _UserId;
+        protected int _UserId = 1;  //sadece bir tane müşteri olduğu için otomatik olarak o müşterinin id'si (1) veriliyor
 
 
         public UnitOfWork(MainDbContext dataContext, IHttpContextAccessor httpContextAccessor)

@@ -51,6 +51,19 @@ namespace webapi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Kategori",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Adi = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Kategori", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Musteri",
                 columns: table => new
                 {
@@ -58,6 +71,7 @@ namespace webapi.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Adi = table.Column<string>(type: "TEXT", nullable: false),
                     Soyadi = table.Column<string>(type: "TEXT", nullable: false),
+                    Firma = table.Column<string>(type: "TEXT", nullable: false),
                     TelefonNumarasi = table.Column<string>(type: "TEXT", nullable: false),
                     Email = table.Column<string>(type: "TEXT", nullable: false),
                     Creator = table.Column<int>(type: "INTEGER", nullable: true),
@@ -69,6 +83,43 @@ namespace webapi.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Musteri", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Teklif",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    UrunId = table.Column<int>(type: "INTEGER", nullable: false),
+                    MusteriId = table.Column<int>(type: "INTEGER", nullable: false),
+                    TeklifDegeri = table.Column<decimal>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Teklif", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Urun",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Adi = table.Column<string>(type: "TEXT", nullable: false),
+                    Aciklama = table.Column<string>(type: "TEXT", nullable: false),
+                    Ebat = table.Column<string>(type: "TEXT", nullable: false),
+                    Fiyat = table.Column<decimal>(type: "TEXT", nullable: false),
+                    ParaBirimi = table.Column<string>(type: "TEXT", nullable: false),
+                    Tedarikci = table.Column<string>(type: "TEXT", nullable: false),
+                    Kdv = table.Column<int>(type: "INTEGER", nullable: false),
+                    Kategori = table.Column<int>(type: "INTEGER", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Creator = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Urun", x => x.Id);
                 });
         }
 
@@ -82,7 +133,16 @@ namespace webapi.Migrations
                 name: "ExceptionLog");
 
             migrationBuilder.DropTable(
+                name: "Kategori");
+
+            migrationBuilder.DropTable(
                 name: "Musteri");
+
+            migrationBuilder.DropTable(
+                name: "Teklif");
+
+            migrationBuilder.DropTable(
+                name: "Urun");
         }
     }
 }

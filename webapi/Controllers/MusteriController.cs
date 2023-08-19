@@ -30,6 +30,7 @@ namespace webapi.Controllers
                 data = _unitOfWork.Repository<Musteri>().GetById(dataVM.Id);
                 data.Adi = dataVM.Adi;
                 data.Soyadi = dataVM.Soyadi;
+                data.Firma = dataVM.Firma;
                 data.Email = dataVM.Email;
                 data.TelefonNumarasi = dataVM.TelefonNumarasi;
             }
@@ -39,6 +40,7 @@ namespace webapi.Controllers
                 {
                     Adi = dataVM.Adi,
                     Soyadi = dataVM.Soyadi,
+                    Firma = dataVM.Firma,
                     Email = dataVM.Email,
                     TelefonNumarasi = dataVM.TelefonNumarasi,
                 };
@@ -61,7 +63,7 @@ namespace webapi.Controllers
             //{
             //    return new ApiResult { Result = false, Message = "Rol kullanıcı tarafından kullanılmaktadır." };
             //}
-            
+
             if (data == null)
             {
                 return new ApiResult { Result = false, Message = "Belirtilen müşteri bulunamadı." };
@@ -76,11 +78,13 @@ namespace webapi.Controllers
         public ApiResult<GridResultModel<MusteriGridVM>> GetGrid()
         {
             var query = _unitOfWork.Repository<Musteri>()
+            .Where(x => x.IsDeleted == false)
             .Select(x => new MusteriGridVM
             {
                 Id = x.Id,
                 Adi = x.Adi,
                 Soyadi = x.Soyadi,
+                Firma = x.Firma,
                 Email = x.Email,
                 TelefonNumarasi = x.TelefonNumarasi,
             });
@@ -97,12 +101,12 @@ namespace webapi.Controllers
             {
                 Id = musteri.Id,
                 Adi = musteri.Adi,
-                Soyadi= musteri.Soyadi,
+                Soyadi = musteri.Soyadi,
+                Firma = musteri.Firma,
                 Email = musteri.Email,
                 TelefonNumarasi = musteri.TelefonNumarasi
             };
             return new ApiResult<MusteriGridVM> { Data = musteriVM, Result = true };
         }
-
     }
 }

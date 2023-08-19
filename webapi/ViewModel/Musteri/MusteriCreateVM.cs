@@ -10,6 +10,8 @@ namespace webapi.ViewModel.Musteri
         [Required]
         public string Soyadi { get; set; }
         [Required]
+        public string Firma { get; set; }
+        [Required]
         public string TelefonNumarasi { get; set; }
         [Required]
         public string Email { get; set; }
