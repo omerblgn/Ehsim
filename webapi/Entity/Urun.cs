@@ -12,6 +12,6 @@
         public int Kdv { get; set; }
         public int Kategori { get; set; }
         public bool IsDeleted { get; set; }
-        public int Creator { get; set; } = 1;
+        public int Creator { get; set; } = 1;   //sadece bir tane müşteri olduğu için otomatik olarak o müşterinin id'si (1) veriliyor
     }
 }

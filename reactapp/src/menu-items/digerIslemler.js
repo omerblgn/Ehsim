@@ -1,8 +1,8 @@
 // assets
-import { IconUsers, IconPackage, IconReportMoney } from '@tabler/icons';
+import { IconUsers, IconPackage, IconReportMoney, IconCategory } from '@tabler/icons';
 
 // constant
-const icons = { IconUsers, IconPackage, IconReportMoney };
+const icons = { IconUsers, IconPackage, IconReportMoney, IconCategory };
 
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
 
@@ -29,6 +29,27 @@ const digerIslemler = {
                     title: 'Müşteri Ekle',
                     type: 'item',
                     url: '/digerIslemler/musteri-ekle'
+                }
+            ]
+        },
+        {
+            id: 'kategoriler',
+            title: 'Kategoriler',
+            type: 'collapse',
+            icon: icons.IconCategory,
+
+            children: [
+                {
+                    id: 'kategoriler',
+                    title: 'Kategori Listesi',
+                    type: 'item',
+                    url: '/digerIslemler/kategoriler'
+                },
+                {
+                    id: 'kategori-ekle',
+                    title: 'Kategori Ekle',
+                    type: 'item',
+                    url: '/digerIslemler/kategori-ekle'
                 }
             ]
         },

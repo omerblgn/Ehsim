@@ -16,6 +16,8 @@ const Tekliflerim = Loadable(lazy(() => import('views/digerIslemler/Teklifler/Te
 const GelenTeklifler = Loadable(lazy(() => import('views/digerIslemler/Teklifler/GelenTeklifler')));
 const TeklifVer = Loadable(lazy(() => import('views/digerIslemler/Teklifler/TeklifVer')));
 const TeklifDuzenle = Loadable(lazy(() => import('views/digerIslemler/Teklifler/TeklifDuzenle')));
+const Kategoriler = Loadable(lazy(() => import('views/digerIslemler/Kategoriler/KategoriListesi')));
+const KategoriEkle = Loadable(lazy(() => import('views/digerIslemler/Kategoriler/KategoriEkle')));
 
 // utilities routing
 const UtilsTypography = Loadable(lazy(() => import('views/utilities/Typography')));
@@ -142,6 +144,18 @@ const MainRoutes = {
                 {
                     path: 'teklif-duzenle/:id',
                     element: <TeklifDuzenle />
+                },
+                {
+                    path: 'kategoriler',
+                    element: <Kategoriler />
+                },
+                {
+                    path: 'kategori-ekle',
+                    element: <KategoriEkle />
+                },
+                {
+                    path: 'kategori-duzenle/:id',
+                    element: <KategoriEkle />
                 }
             ]
         }

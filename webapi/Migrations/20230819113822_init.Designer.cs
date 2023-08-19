@@ -11,7 +11,7 @@ using webapi.Data;
 namespace webapi.Migrations
 {
     [DbContext(typeof(MainDbContext))]
-    [Migration("20230819110017_init")]
+    [Migration("20230819113822_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -71,6 +71,9 @@ namespace webapi.Migrations
                     b.Property<string>("Adi")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
