@@ -40,7 +40,6 @@ const Example = () => {
                 .request(config)
                 .then((response) => {
                     responseData = response.data.data;
-                    console.log(responseData);
                 })
                 .catch((error) => {
                     console.log(error);

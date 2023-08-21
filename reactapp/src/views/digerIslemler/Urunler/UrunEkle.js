@@ -64,13 +64,13 @@ function UrunEkle(params) {
             toast.promise(urunEklePromise, {
                 pending: 'Ürün güncelleniyor',
                 success: urunAdi + ' başarıyla güncellendi 👌',
-                error: urunAdi + ' güncellenirken hata oluştu 🤯'
+                error: urunAdi !== '' ? urunAdi + ' güncellenirken hata oluştu 🤯' : 'Ürün güncellenirken hata oluştu 🤯'
             });
         } else {
             toast.promise(urunEklePromise, {
                 pending: 'Ürün kaydı yapılıyor',
                 success: urunAdi + ' başarıyla eklendi 👌',
-                error: urunAdi != '' ? urunAdi : 'Ürün' + ' eklenirken hata oluştu 🤯'
+                error: urunAdi !== '' ? urunAdi + ' eklenirken hata oluştu 🤯' : 'Ürün eklenirken hata oluştu 🤯'
             });
         }
     };
@@ -90,7 +90,6 @@ function UrunEkle(params) {
                 kdv: kdv,
                 kategori: selectedKategori
             });
-            console.log('Data:', data);
 
             let config = {
                 method: 'post',
@@ -152,7 +151,6 @@ function UrunEkle(params) {
                         if (millis < 500) {
                             await sleep(500 - millis);
                         }
-                        console.log(response.data);
                         setUrunAdi(response.data.data.adi);
                         setUrunAciklamasi(response.data.data.aciklama);
                         setUrunEbadi(response.data.data.ebat);
@@ -202,7 +200,6 @@ function UrunEkle(params) {
                         if (millis < 500) {
                             await sleep(500 - millis);
                         }
-                        console.log(response.data.data);
                         setKategoriler(response.data.data);
                         setFetchingError(false);
                         resolve(response.data); // Başarılı sonuç d1urumunda Promise'ı çöz
@@ -278,6 +275,7 @@ function UrunEkle(params) {
                                                 select
                                                 defaultValue="TRY"
                                                 variant="standard"
+                                                value={paraBirimi}
                                                 onChange={(e) => setParaBirimi(e.target.value)}
                                             >
                                                 {paraBirimleri.map((option) => (
@@ -302,7 +300,7 @@ function UrunEkle(params) {
                                 required
                                 margin="normal"
                                 id="kdvOrani"
-                                label="KDV Oranı"
+                                label="KDV Oranı (%)"
                                 variant="outlined"
                                 value={kdv}
                                 onChange={(e) => setKdv(e.target.value)}

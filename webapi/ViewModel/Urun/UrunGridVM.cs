@@ -12,7 +12,7 @@ namespace webapi.ViewModel.Urun
         public string ParaBirimi { get; set; }
         public string Tedarikci { get; set; }
         public int Kdv { get; set; }
-        public int Kategori { get; set; }
+        public string Kategori { get; set; }
         public string UrunSahibi { get; set; }
     }
 }

@@ -70,7 +70,10 @@ function MusteriEkle() {
             toast.promise(musteriEklePromise, {
                 pending: 'Müşteri kaydı yapılıyor',
                 success: musteriAdi + ' ' + musteriSoyadi + ' başarıyla eklendi 👌',
-                error: musteriAdi != '' && musteriSoyadi != '' ? musteriAdi + ' ' + musteriSoyadi : 'Müşteri' + ' eklenirken hata oluştu 🤯'
+                error:
+                    musteriAdi != '' && musteriSoyadi != ''
+                        ? musteriAdi + ' ' + musteriSoyadi + ' eklenirken hata oluştu 🤯'
+                        : 'Müşteri eklenirken hata oluştu 🤯'
             });
         }
     };
@@ -110,6 +113,7 @@ function MusteriEkle() {
                         }
                         resolve(response.data); // Başarılı sonuç durumunda Promise'ı çöz
                     } else {
+                        toast.error(response.data.message);
                         reject(new Error('İşlem başarısız')); // Başarısız sonuç durumunda Promise'ı reddet
                     }
                 })

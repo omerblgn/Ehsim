@@ -24,7 +24,15 @@ namespace webapi.Controllers
         {
             if (!ModelState.IsValid)
                 return new ApiResult { Result = false, Message = "Form'da doldurulmayan alanlar mevcut,lütfen doldurun." };
+
             Musteri data;
+
+            bool duplicateExists = _unitOfWork.Repository<Musteri>().Any(x => x.Email == dataVM.Email || x.TelefonNumarasi == dataVM.TelefonNumarasi);
+            if (duplicateExists)
+            {
+                return new ApiResult { Result = false, Message = "Bu e-posta adresi veya telefon numarasına sahip müşteri zaten var." };
+            }
+
             if (dataVM.Id > 0)
             {
                 data = _unitOfWork.Repository<Musteri>().GetById(dataVM.Id);

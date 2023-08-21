@@ -80,6 +80,12 @@ const digerIslemler = {
             icon: icons.IconReportMoney,
             children: [
                 {
+                    id: 'teklif-olustur',
+                    title: 'Teklif Oluştur',
+                    type: 'item',
+                    url: '/digerIslemler/teklif-olustur'
+                },
+                {
                     id: 'tekliflerim',
                     title: 'Tekliflerim',
                     type: 'item',

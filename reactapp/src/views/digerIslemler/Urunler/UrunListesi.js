@@ -1,23 +1,10 @@
 import { useMemo, useState } from 'react';
 import MaterialReactTable from 'material-react-table';
-import {
-    Box,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    IconButton,
-    Tooltip,
-    Button,
-    DialogContentText,
-    InputAdornment,
-    Input,
-    FormControl
-} from '@mui/material';
+import { Box, IconButton, Tooltip } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { AddCircle as AddCircleIcon, Edit as EditIcon, Delete as DeleteIcon, LocalOffer as LocalOfferIcon } from '@mui/icons-material';
+import { AddCircle as AddCircleIcon, Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
@@ -60,8 +47,8 @@ const Example = () => {
             await axios
                 .request(config)
                 .then((response) => {
-                    console.log(response.data.data.list);
                     responseData = response.data.data;
+                    console.log(responseData.list);
                 })
                 .catch((error) => {
                     console.log(error);
@@ -75,7 +62,7 @@ const Example = () => {
         () => [
             {
                 accessorKey: 'adi',
-                header: 'İsim'
+                header: 'Ürün Adı'
             },
             {
                 accessorKey: 'aciklama',
@@ -87,19 +74,29 @@ const Example = () => {
             },
             {
                 accessorKey: 'fiyat',
-                header: 'Fiyat'
+                header: 'Fiyat',
+                Cell: ({ cell }) => (
+                    <>
+                        {cell.getValue()?.toLocaleString?.('tr-TR', {
+                            style: 'currency',
+                            currency: cell.row.original.paraBirimi,
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 2
+                        })}
+                    </>
+                )
             },
-            {
-                accessorKey: 'paraBirimi',
-                header: 'Para Birimi'
-            },
+            // {
+            //     accessorKey: 'paraBirimi',
+            //     header: 'Para Birimi'
+            // },
             {
                 accessorKey: 'tedarikci',
                 header: 'Tedarikçi Firma'
             },
             {
                 accessorKey: 'kdv',
-                header: 'KDV Oranı'
+                header: 'KDV Oranı (%)'
             },
             {
                 accessorKey: 'kategori',
@@ -199,6 +196,14 @@ const Example = () => {
     return (
         <>
             <MaterialReactTable
+                muiTableBodyRowProps={({ row }) => ({
+                    onClick: () => {
+                        navigate(`/digerIslemler/urun-detay/${row.original.id}`);
+                    },
+                    sx: {
+                        cursor: 'pointer'
+                    }
+                })}
                 enableRowActions
                 displayColumnDefOptions={{
                     'mrt-row-actions': {
@@ -210,7 +215,8 @@ const Example = () => {
                         <Tooltip title="Teklif ver">
                             <IconButton
                                 color="primary"
-                                onClick={() => {
+                                onClick={(e) => {
+                                    e.stopPropagation();
                                     teklifKontrol(row.original.id, row.original.adi, row.original.urunSahibi);
                                 }}
                             >
@@ -220,7 +226,8 @@ const Example = () => {
                         <Tooltip title="Düzenle">
                             <IconButton
                                 color="secondary"
-                                onClick={() => {
+                                onClick={(e) => {
+                                    e.stopPropagation();
                                     navigate(`/digerIslemler/urun-duzenle/${row.original.id}`);
                                 }}
                             >
@@ -230,7 +237,8 @@ const Example = () => {
                         <Tooltip title="Sil">
                             <IconButton
                                 color="error"
-                                onClick={() => {
+                                onClick={(e) => {
+                                    e.stopPropagation();
                                     deleteById(row.original.id);
                                 }}
                             >

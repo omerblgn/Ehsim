@@ -89,7 +89,10 @@ namespace webapi.Controllers
                 ParaBirimi = x.ParaBirimi,
                 Tedarikci = x.Tedarikci,
                 Kdv = x.Kdv,
-                Kategori = x.Kategori,
+                Kategori = _unitOfWork.GetContext().Set<Kategori>()
+                    .Where(k => k.Id == x.Kategori)
+                    .Select(k => k.Adi)
+                    .FirstOrDefault(),
                 UrunSahibi = _unitOfWork.GetContext().Set<Musteri>()
                             .Where(m => m.Id == x.Creator)
                             .Select(m => m.Adi + " " + m.Soyadi)
@@ -101,10 +104,14 @@ namespace webapi.Controllers
         }
 
         [HttpPost("Get")]
-        public ApiResult<UrunGridVM> Get(int id)
+        public ApiResult<Urun> Get(int id)
         {
             var urun = _unitOfWork.GetContext().Set<Urun>().FirstOrDefault(u => u.Id == id);
-            UrunGridVM musteriVM = new UrunGridVM
+            if (urun == null)
+            {
+                return new ApiResult<Urun> { Result = false, Message = "Ürün bulunamadı." };
+            }
+            Urun musteriVM = new Urun
             {
                 Id = urun.Id,
                 Adi = urun.Adi,
@@ -116,7 +123,7 @@ namespace webapi.Controllers
                 Kdv = urun.Kdv,
                 Kategori = urun.Kategori,
             };
-            return new ApiResult<UrunGridVM> { Data = musteriVM, Result = true };
+            return new ApiResult<Urun> { Data = musteriVM, Result = true };
         }
     }
 }

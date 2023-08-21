@@ -12,6 +12,8 @@ const Musteriler = Loadable(lazy(() => import('views/digerIslemler/Musteriler/Mu
 const MusteriEkle = Loadable(lazy(() => import('views/digerIslemler/Musteriler/MusteriEkle')));
 const Urunler = Loadable(lazy(() => import('views/digerIslemler/Urunler/UrunListesi')));
 const UrunEkle = Loadable(lazy(() => import('views/digerIslemler/Urunler/UrunEkle')));
+const UrunDetay = Loadable(lazy(() => import('views/digerIslemler/Urunler/UrunDetay')));
+const TeklifOlustur = Loadable(lazy(() => import('views/digerIslemler/Teklifler/TeklifOlustur')));
 const Tekliflerim = Loadable(lazy(() => import('views/digerIslemler/Teklifler/Tekliflerim')));
 const GelenTeklifler = Loadable(lazy(() => import('views/digerIslemler/Teklifler/GelenTeklifler')));
 const TeklifVer = Loadable(lazy(() => import('views/digerIslemler/Teklifler/TeklifVer')));
@@ -130,12 +132,20 @@ const MainRoutes = {
                     element: <UrunEkle />
                 },
                 {
+                    path: 'urun-detay/:id',
+                    element: <UrunDetay />
+                },
+                {
                     path: 'tekliflerim',
                     element: <Tekliflerim />
                 },
                 {
                     path: 'gelen-teklifler',
                     element: <GelenTeklifler />
+                },
+                {
+                    path: 'teklif-olustur',
+                    element: <TeklifOlustur />
                 },
                 {
                     path: 'teklif-ver/:id',
