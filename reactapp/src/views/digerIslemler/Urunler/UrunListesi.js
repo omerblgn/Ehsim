@@ -4,12 +4,11 @@ import { Box, IconButton, Tooltip } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { AddCircle as AddCircleIcon, Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
 const Example = () => {
-    const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
     const navigate = useNavigate();
 
     const [columnFilters, setColumnFilters] = useState([]);
@@ -19,14 +18,6 @@ const Example = () => {
         pageIndex: 0,
         pageSize: 10
     });
-
-    const [urunAdi, setUrunAdi] = useState('');
-    const [urunId, setUrunId] = useState('');
-    const [teklifDegeri, setTeklifDegeri] = useState('');
-    const [musteriId, setMusteriId] = useState('');
-    const [openDialog, setOpenDialog] = useState(false);
-    const [offer, setOffer] = useState('');
-    const [validationErrors, setValidationErrors] = useState({});
 
     const { data, isError, isFetching, isLoading, refetch } = useQuery({
         queryKey: ['table-data'],
@@ -86,10 +77,6 @@ const Example = () => {
                     </>
                 )
             },
-            // {
-            //     accessorKey: 'paraBirimi',
-            //     header: 'Para Birimi'
-            // },
             {
                 accessorKey: 'tedarikci',
                 header: 'Tedarikçi Firma'
@@ -151,48 +138,6 @@ const Example = () => {
         });
     };
 
-    const teklifKontrol = (id, ad, sahibi) => {
-        return new Promise(async (resolve, reject) => {
-            let config = {
-                method: 'post',
-                maxBodyLength: Infinity,
-                url: 'http://localhost:5273/api/Teklif/TeklifKontrol',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Accept: 'text/plain'
-                },
-                params: {
-                    id: id
-                }
-            };
-
-            axios
-                .request(config)
-                .then(async (response) => {
-                    console.log(JSON.stringify(response.data));
-                    if (response.data.result) {
-                        if (response.data.data == 1) {
-                            toast.warn('Bu ürüne zaten teklif yaptınız: "' + ad + '"');
-                        } else {
-                            navigate(`/digerIslemler/teklif-ver/${id}`, {
-                                state: {
-                                    urunAdi: ad,
-                                    urunSahibi: sahibi
-                                }
-                            });
-                        }
-                        resolve(response.data);
-                    } else {
-                        reject(new Error('İşlem başarısız'));
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                    reject(error);
-                });
-        });
-    };
-
     return (
         <>
             <MaterialReactTable
@@ -212,17 +157,6 @@ const Example = () => {
                 }}
                 renderRowActions={({ row }) => (
                     <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
-                        <Tooltip title="Teklif ver">
-                            <IconButton
-                                color="primary"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    teklifKontrol(row.original.id, row.original.adi, row.original.urunSahibi);
-                                }}
-                            >
-                                <AddCircleIcon />
-                            </IconButton>
-                        </Tooltip>
                         <Tooltip title="Düzenle">
                             <IconButton
                                 color="secondary"

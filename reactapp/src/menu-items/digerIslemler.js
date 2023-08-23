@@ -90,12 +90,6 @@ const digerIslemler = {
                     title: 'Tekliflerim',
                     type: 'item',
                     url: '/digerIslemler/tekliflerim'
-                },
-                {
-                    id: 'gelen-teklifler',
-                    title: 'Gelen Teklifler',
-                    type: 'item',
-                    url: '/digerIslemler/gelen-teklifler'
                 }
             ]
         }

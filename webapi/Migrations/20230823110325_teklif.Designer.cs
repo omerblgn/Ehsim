@@ -11,7 +11,7 @@ using webapi.Data;
 namespace webapi.Migrations
 {
     [DbContext(typeof(MainDbContext))]
-    [Migration("20230822134213_teklif")]
+    [Migration("20230823110325_teklif")]
     partial class teklif
     {
         /// <inheritdoc />
@@ -181,7 +181,13 @@ namespace webapi.Migrations
                     b.Property<DateTime>("TeklifTarihi")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("ToplamFiyat")
+                    b.Property<decimal>("ToplamFiyatEUR")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("ToplamFiyatTRY")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("ToplamFiyatUSD")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

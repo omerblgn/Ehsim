@@ -33,6 +33,7 @@ const Example = () => {
     const [eklenenUrunler, setEklenenUrunler] = useState([]);
     const [firstRowSelection, setFirstRowSelection] = useState({});
     const [secondRowSelection, setSecondRowSelection] = useState({});
+    const [toplamKdvFiyat, setToplamKdvFiyat] = useState();
 
     const [paraBirimi, setParaBirimi] = useState('');
     const [fiyat, setFiyat] = useState(0);
@@ -134,7 +135,7 @@ const Example = () => {
         []
     );
 
-    const calculateFooterValues = () => {
+    const calculateFiyatFooterValues = () => {
         let toplamTRY = 0;
         let toplamUSD = 0;
         let toplamEUR = 0;
@@ -154,6 +155,31 @@ const Example = () => {
             toplamTRY,
             toplamUSD,
             toplamEUR
+        };
+    };
+
+    const calculateKdvFiyatFooterValues = () => {
+        let toplamKdvTRY = 0;
+        let toplamKdvUSD = 0;
+        let toplamKdvEUR = 0;
+
+        eklenenUrunler.forEach((urun) => {
+            const fiyat = parseFloat(urun.fiyat);
+            const kdv = parseInt(urun.kdv);
+            const adet = parseInt(urun.adet);
+            if (urun.paraBirimi === 'TRY') {
+                toplamKdvTRY += (fiyat + (fiyat * kdv) / 100) * adet;
+            } else if (urun.paraBirimi === 'USD') {
+                toplamKdvUSD += (fiyat + (fiyat * kdv) / 100) * adet;
+            } else if (urun.paraBirimi === 'EUR') {
+                toplamKdvEUR += (fiyat + (fiyat * kdv) / 100) * adet;
+            }
+        });
+
+        return {
+            toplamKdvTRY,
+            toplamKdvUSD,
+            toplamKdvEUR
         };
     };
 
@@ -177,7 +203,7 @@ const Example = () => {
                 // aggregationFn: 'sum',
                 // AggregatedCell: ({ cell }) => <Box sx={{ color: 'warning.main' }}>{cell.getValue()}</Box>,
                 Footer: () => {
-                    const { toplamTRY, toplamUSD, toplamEUR } = calculateFooterValues();
+                    const { toplamTRY, toplamUSD, toplamEUR } = calculateFiyatFooterValues();
                     return (
                         <>
                             <div>Toplam</div>
@@ -277,7 +303,8 @@ const Example = () => {
                     if (urun) {
                         const fiyat = parseFloat(urun.fiyat);
                         const kdv = parseFloat(urun.kdv);
-                        const kdvDahilFiyat = fiyat + (fiyat * kdv) / 100;
+                        const adet = parseInt(urun.adet);
+                        const kdvDahilFiyat = (fiyat + (fiyat * kdv) / 100) * adet;
                         return (
                             <>
                                 {kdvDahilFiyat.toLocaleString('tr-TR', {
@@ -304,8 +331,45 @@ const Example = () => {
                     //         })}
                     //     </>
                     // );
+                },
+                Footer: () => {
+                    const { toplamKdvTRY, toplamKdvUSD, toplamKdvEUR } = calculateKdvFiyatFooterValues();
+                    return (
+                        <>
+                            <div>Toplam</div>
+                            {toplamKdvTRY !== 0 && (
+                                <div>
+                                    {toplamKdvTRY.toLocaleString('tr-TR', {
+                                        style: 'currency',
+                                        currency: 'TRY',
+                                        minimumFractionDigits: 0,
+                                        maximumFractionDigits: 2
+                                    })}
+                                </div>
+                            )}
+                            {toplamKdvUSD !== 0 && (
+                                <div>
+                                    {toplamKdvUSD.toLocaleString('tr-TR', {
+                                        style: 'currency',
+                                        currency: 'USD',
+                                        minimumFractionDigits: 0,
+                                        maximumFractionDigits: 2
+                                    })}
+                                </div>
+                            )}
+                            {toplamKdvEUR !== 0 && (
+                                <div>
+                                    {toplamKdvEUR.toLocaleString('tr-TR', {
+                                        style: 'currency',
+                                        currency: 'EUR',
+                                        minimumFractionDigits: 0,
+                                        maximumFractionDigits: 2
+                                    })}
+                                </div>
+                            )}
+                        </>
+                    );
                 }
-                // Footer: 'Toplam: ' + toplam
             }
         ],
         [eklenenUrunler]
@@ -380,20 +444,32 @@ const Example = () => {
             const start = Date.now();
             setValidationErrors({});
 
-            let toplamFiyat = 0;
+            let toplamFiyatTRY = 0;
+            let toplamFiyatUSD = 0;
+            let toplamFiyatEUR = 0;
             eklenenUrunler.map((urun) => {
-                toplamFiyat += urun.fiyat * urun.adet;
+                if (urun.paraBirimi == 'TRY') {
+                    toplamFiyatTRY += (urun.fiyat + (urun.fiyat * urun.kdv) / 100) * urun.adet;
+                } else if (urun.paraBirimi == 'USD') {
+                    toplamFiyatUSD += (urun.fiyat + (urun.fiyat * urun.kdv) / 100) * urun.adet;
+                } else if (urun.paraBirimi == 'EUR') {
+                    toplamFiyatEUR += (urun.fiyat + (urun.fiyat * urun.kdv) / 100) * urun.adet;
+                }
+                // toplamFiyat += (urun.fiyat + (urun.fiyat * urun.kdv) / 100) * urun.adet;
             });
 
             let data = JSON.stringify({
                 teklifSuresi: teklifSuresi,
                 iskontoOrani: iskontoOrani,
-                toplamFiyat: toplamFiyat,
+                toplamFiyatTRY: toplamFiyatTRY,
+                toplamFiyatUSD: toplamFiyatUSD,
+                toplamFiyatEUR: toplamFiyatEUR,
                 teklifItems: eklenenUrunler.map((urun) => {
                     return {
                         urunId: urun.id,
                         adet: urun.adet || 1,
-                        birimFiyat: urun.fiyat
+                        birimFiyat: urun.fiyat,
+                        paraBirimi: urun.paraBirimi
                     };
                 })
             });
